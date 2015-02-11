@@ -1,0 +1,97 @@
+public static string FormatNumericWithSeparate(double field)
+		{
+			int DecimalNumber = 2;
+			string DecimalChar = ".";
+			string SeperateChar = ",";
+			string ValueString = field.ToString();
+			string ValueStringAfterDecimal = "";
+			string ValueStringNew = "";
+			int iLength = ValueString.Length;
+
+			if (field < 0) 
+				ValueString = ValueString.Substring(1, iLength - 1); //Bo dau tru
+
+			int iIndexOfDecimalChar = ValueString.IndexOf(DecimalChar);
+			if (iIndexOfDecimalChar != -1)
+			{
+				string[] mArray = ValueString.Split(new Char [] {'.'});
+			
+				if (mArray.Length > 1)
+				{
+					ValueStringAfterDecimal = DecimalChar + mArray.GetValue(1).ToString().Trim();
+					if (ValueStringAfterDecimal.Length>3)
+						ValueStringAfterDecimal = ValueStringAfterDecimal.Substring(0, DecimalNumber + 1); // Tinh luon dau cham
+					ValueString = mArray.GetValue(0).ToString().Trim();
+				}
+				
+				//ValueString = ValueString.Substring(0, iIndexOfDecimalChar);
+			}
+
+			ValueString = ValueString.Replace(",", "");
+
+			ValueStringNew = "";
+
+			while (ValueString.Length >3)
+			{
+				ValueStringNew = SeperateChar + ValueString.Substring(ValueString.Length - 3, 3) + ValueStringNew;
+				ValueString = ValueString.Substring(0, ValueString.Length - 3);
+			}
+
+			if (DecimalNumber != 0)
+				ValueStringNew = ValueString + ValueStringNew + ValueStringAfterDecimal;
+			else
+				ValueStringNew = ValueString + ValueStringNew;
+
+			if (field < 0) 
+				ValueStringNew = "-" + ValueStringNew;
+	
+			return ValueStringNew;
+		}
+		public static string FormatNumericNonDecimal(double field)
+		{
+			int DecimalNumber = 0;
+			string DecimalChar = ".";
+			string SeperateChar = ",";
+			string ValueString = field.ToString();
+			string ValueStringAfterDecimal = "";
+			string ValueStringNew = "";
+			int iLength = ValueString.Length;
+
+			if (field < 0) 
+				ValueString = ValueString.Substring(1, iLength - 1); //Bo dau tru
+
+			int iIndexOfDecimalChar = ValueString.IndexOf(DecimalChar);
+			if (iIndexOfDecimalChar != -1)
+			{
+				string[] mArray = ValueString.Split(new Char [] {'.'});
+			
+				if (mArray.Length > 1)
+				{
+					ValueStringAfterDecimal = DecimalChar + mArray.GetValue(1).ToString().Trim();
+					ValueString = mArray.GetValue(0).ToString().Trim();
+				}
+				//ValueStringAfterDecimal = ValueString.Substring(iIndexOfDecimalChar, DecimalNumber + 1); // Tinh luon dau cham
+				//ValueString = ValueString.Substring(0, iIndexOfDecimalChar);
+			}
+
+			ValueString = ValueString.Replace(",", "");
+
+			ValueStringNew = "";
+
+			while (ValueString.Length >3)
+			{
+				ValueStringNew = SeperateChar + ValueString.Substring(ValueString.Length - 3, 3) + ValueStringNew;
+				ValueString = ValueString.Substring(0, ValueString.Length - 3);
+			}
+
+			if (DecimalNumber != 0)
+				ValueStringNew = ValueString + ValueStringNew + ValueStringAfterDecimal;
+			else
+				ValueStringNew = ValueString + ValueStringNew;
+
+			if (field < 0) 
+				ValueStringNew = "-" + ValueStringNew;
+	
+			return ValueStringNew;
+		}
+	}
