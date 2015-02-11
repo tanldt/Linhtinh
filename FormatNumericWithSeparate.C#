@@ -1,3 +1,23 @@
+opt1.Attributes.Add("onclick","return showtable(this.id)");
+private void setDecision(int sValue)
+{
+	if (sValue==1)
+	{
+		opt1.Checked=true;
+		opt2.Checked=false;
+		trDecision1.Style.Add("DISPLAY","none");
+		trDecision2.Style.Add("DISPLAY","none");
+		trDecision3.Style.Add("DISPLAY","none");
+	}
+	else
+	{
+		opt2.Checked=true;
+		opt1.Checked=false;
+		trDecision1.Style.Add("DISPLAY","block");
+		trDecision2.Style.Add("DISPLAY","block");
+		trDecision3.Style.Add("DISPLAY","block");
+	}
+}
 public static string FormatNumericWithSeparate(double field)
 		{
 			int DecimalNumber = 2;
