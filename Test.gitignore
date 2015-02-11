@@ -1,0 +1,40 @@
+ALTER    FUNCTION [dbo].[fnConvertNumber] (@ValueIn money)  
+RETURNS nvarchar(100) AS  
+BEGIN 
+	DECLARE @DecimalNumber smallint
+	DECLARE @DecimalChar varchar(5)
+	DECLARE @SeperateChar varchar(5)
+	DECLARE @ValueString nvarchar(100)
+	DECLARE @ValueStringAfterDecimal nvarchar(100)
+	DECLARE @ValueStringNew nvarchar(100)
+	SET @DecimalNumber = 0
+	SET @DecimalChar = '.'
+	SET @SeperateChar = ','	
+--	IF IsNull(@ValueIn, 0) = 0 RETURN '<p align=right>0</p>'
+	IF IsNull(@ValueIn, 0) = 0 RETURN '0'
+	SET @ValueString = Convert(nvarchar(100), @ValueIn)
+	IF @ValueIn < 0 SET @ValueString = Substring(@ValueString, 2, Len(@ValueString) - 1) -- Bo dau tru
+
+	SET @ValueStringAfterDecimal = SubString(@ValueString, CharIndex(@DecimalChar, @ValueString), @DecimalNumber + 3) -- Tinh luon dau cham
+	IF @ValueStringAfterDecimal='.00' 
+		set @DecimalNumber=0
+	ELSE
+		set @DecimalNumber=1
+	SET @ValueString = SubString(@ValueString, 1, CharIndex(@DecimalChar, @ValueString) - 1)
+	SET @ValueStringNew =''
+	WHILE (Len(@ValueString) >3)
+	BEGIN
+		SET @ValueStringNew = @SeperateChar + RIGHT(@ValueString, 3) + @ValueStringNew
+		SET @ValueString = SUBSTRING(@ValueString, 1, LEN(@ValueString) - 3)
+	END
+	IF @DecimalNumber <> 0 
+		SET @ValueStringNew = @ValueString + @ValueStringNew + @ValueStringAfterDecimal
+	ELSE
+		SET @ValueStringNew = @ValueString + @ValueStringNew 
+	
+	IF @ValueIn < 0 SET @ValueStringNew = '-' + @ValueStringNew
+--	SET @ValueStringNew = '<p align=right>' + @ValueStringNew + '</p>'
+	SET @ValueStringNew = '' +  @ValueStringNew  + ''
+	
+	RETURN @ValueStringNew
+END
