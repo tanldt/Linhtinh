@@ -4,6 +4,11 @@
  * Author: Tanldt
  * Web Site: 
  * Mail/MSN: letanphp@gmail.com
+ How to use:
+ 
+ ExcelExporter myExcelXport=new ExcelExporter(this.Page);
+ myExcelXport.ExportHTMLToExcel(strReports,"Excel");
+ myExcelXport = null;
  * ********************************************************/
 using System;
 using System.Data;
