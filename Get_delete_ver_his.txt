@@ -1,0 +1,65 @@
+class Program
+
+{
+
+static void Main(string[] args)
+
+{
+
+using (ClientContext ctx = new ClientContext(“SITE_URL”))
+
+{
+
+CamlQuery camlQuery = new CamlQuery();
+
+Web web = ctx.Web;
+
+ctx.Load(web,
+
+                    w => w.ServerRelativeUrl,
+
+                    w => w.Lists);
+
+List list = web.Lists.GetByTitle(“LIST_TITLE”);
+
+ctx.Load(list);
+
+ListItemCollection itemColl = list.GetItems(camlQuery);
+
+ctx.Load(itemColl);
+
+ctx.ExecuteQuery();
+
+foreach (ListItem item in itemColl)
+
+{
+
+File fileVersion = web.GetFileByServerRelativeUrl(web.ServerRelativeUrl +    “/Lists/” + list.Title + “/” + item.Id + “_.000”);
+
+ctx.Load(fileVersion);
+
+FileVersionCollection fileVersionCollection = fileVersion.Versions;
+
+ctx.Load(fileVersionCollection);
+
+ctx.ExecuteQuery();
+
+for (int iVersionCount = 0; iVersionCount < fileVersionCollection.Count; iVersionCount++)
+
+{
+
+FileVersion version = fileVersionCollection[iVersionCount];
+
+fileVersionCollection.DeleteByID(version.ID);
+
+}
+
+ctx.ExecuteQuery();
+
+}
+
+}
+
+}
+
+}
