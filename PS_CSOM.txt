@@ -1,0 +1,99 @@
+----Get List Items
+
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll"  
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"  
+  
+$siteURL = ""  
+$userId = ""  
+$pwd = Read-Host -Prompt "Enter password" -AsSecureString  
+$creds = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($userId, $pwd)  
+$ctx = New-Object Microsoft.SharePoint.Client.ClientContext($siteURL)  
+$ctx.credentials = $creds  
+try{  
+    $lists = $ctx.web.Lists  
+    $list = $lists.GetByTitle("TestList")  
+    $listItems = $list.GetItems([Microsoft.SharePoint.Client.CamlQuery]::CreateAllItemsQuery())  
+    $ctx.load($listItems)  
+      
+    $ctx.executeQuery()  
+    foreach($listItem in $listItems)  
+    {  
+        Write-Host "ID - " $listItem["ID"] "Title - " $listItem["Title"]  
+    }  
+}  
+catch{  
+    write-host "$($_.Exception.Message)" -foregroundcolor red  
+}  
+
+
+----Create List Item
+
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll"  
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"  
+  
+$siteURL = ""  
+$userId = ""  
+$pwd = Read-Host -Prompt "Enter password" -AsSecureString  
+$creds = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($userId, $pwd)  
+$ctx = New-Object Microsoft.SharePoint.Client.ClientContext($siteURL)  
+$ctx.credentials = $creds  
+try{  
+    $lists = $ctx.web.Lists  
+    $list = $lists.GetByTitle("TestList")  
+    $listItemInfo = New-Object Microsoft.SharePoint.Client.ListItemCreationInformation  
+    $listItem = $list.AddItem($listItemInfo)  
+    $listItem["Title"] = "c"  
+    $listItem.Update()      
+    $ctx.load($list)      
+    $ctx.executeQuery()  
+    Write-Host "Item Added with ID - " $listItem.Id      
+}  
+catch{  
+    write-host "$($_.Exception.Message)" -foregroundcolor red  
+}  
+
+
+----Delete List Item
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll"  
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"  
+  
+$siteURL = ""  
+$userId = ""  
+$pwd = Read-Host -Prompt "Enter password" -AsSecureString  
+$creds = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($userId, $pwd)  
+$ctx = New-Object Microsoft.SharePoint.Client.ClientContext($siteURL)  
+$ctx.credentials = $creds  
+try{  
+    $lists = $ctx.web.Lists  
+    $list = $lists.GetByTitle("TestList")  
+    $listItem = $list.GetItemById(1)  
+    $listItem.DeleteObject()  
+    $ctx.executeQuery()      
+}  
+catch{  
+    write-host "$($_.Exception.Message)" -foregroundcolor red  
+}  
+
+----Update List Item
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.dll"  
+Add-Type -Path "C:\Program Files\Common Files\microsoft shared\Web Server Extensions\15\ISAPI\Microsoft.SharePoint.Client.Runtime.dll"  
+  
+$siteURL = ""  
+$userId = ""  
+$pwd = Read-Host -Prompt "Enter password" -AsSecureString  
+$creds = New-Object Microsoft.SharePoint.Client.SharePointOnlineCredentials($userId, $pwd)  
+$ctx = New-Object Microsoft.SharePoint.Client.ClientContext($siteURL)  
+$ctx.credentials = $creds  
+try{  
+    $lists = $ctx.web.Lists  
+    $list = $lists.GetByTitle("TestList")  
+    $listItem = $list.GetItemById(1)  
+    $listItem["Title"] = "aa"  
+    $listItem.Update()  
+    $ctx.load($listItem)      
+    $ctx.executeQuery()  
+}  
+catch{  
+    write-host "$($_.Exception.Message)" -foregroundcolor red  
+} 
+
